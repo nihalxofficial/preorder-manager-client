@@ -1,43 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Preorder Manager — Frontend
 
-## Getting Started
+Next.js client for the Preorder Manager app.
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
 ## Tech Stack
 
-- Next.js
-- Heroui
-- Tailwind css
-- Lucide react
+- **Next.js 16** — Full-stack React framework
+- **HeroUI** — UI component library
+- **Tailwind CSS** — Utility-first styling
+- **Lucide React** — Icons
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+preorder-manager-client/
+├── app/
+│   ├── page.js                     # Preorder List page
+│   ├── preorders/
+│   │   ├── create/page.js          # Create Preorder page
+│   │   └── [id]/edit/page.js       # Edit Preorder page
+│   ├── layout.js
+│   └── globals.css
+├── components/                     # Reusable UI components
+├── .env.local                      # Environment variables
+└── package.json
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Prerequisites
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Node.js v18 or higher
+- npm
+- Backend server running at `http://localhost:5000` (see backend README)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Setup & Run Locally
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 1. Clone the repository
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+git clone <your-repo-url>
+cd preorder-manager-client
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure environment variables
+
+Create a `.env.local` file in the root:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+```
+
+### 4. Start the development server
+
+```bash
+npm run dev
+```
+
+App runs at: `http://localhost:3000`
+
+---
+
+## Pages
+
+| Route | Description |
+|-------|-------------|
+| `/` | Preorder List — filter, sort, paginate, toggle status, delete |
+| `/preorders/create` | Create a new preorder |
+| `/preorders/[id]/edit` | Edit an existing preorder |
+
+---
+
+## Features
+
+- **List Page** — filter by status (All / Active / Inactive), sort by columns, paginate — all handled server-side
+- **Select All / Row checkboxes** — check/uncheck individual or all visible rows
+- **Status Toggle** — instantly switches Active ↔ Inactive with UI feedback
+- **Delete** — removes record and refreshes list
+- **Create / Edit Form** — shared form page, pre-filled in edit mode
+- **Loading Spinner** — shown during save operations
+- **Empty State** — displayed when no preorders exist
+
+---
+
+## Connecting to the Backend
+
+Make sure the backend server is running first:
+
+```bash
+# In the backend folder
+npm run dev   # runs on http://localhost:5000
+```
+
+Then start the frontend:
+
+```bash
+# In the frontend folder
+npm run dev   # runs on http://localhost:3000
+```
+
+---
+
+## Useful Commands
+
+```bash
+npm run dev      # Start development server
+npm run build    # Build for production
+npm start        # Start production server
+npm run lint     # Run ESLint
+```
+
+---
+
+## Notes
+
+- The backend must be running before using the frontend
+- All filtering, sorting, and pagination is done server-side via the backend API — not client-side
+- For production, update `NEXT_PUBLIC_API_URL` in `.env.local` to your deployed backend URL

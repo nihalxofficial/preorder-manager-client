@@ -207,7 +207,6 @@ export default function PreordersClient({
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this preorder?")) return;
 
     try {
       const result = await deletePreorderAction(id);
