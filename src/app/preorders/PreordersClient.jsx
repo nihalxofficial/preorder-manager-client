@@ -43,16 +43,14 @@ function StatusToggle({ isSelected, onChange, isDisabled }) {
     <button
       onClick={() => !isDisabled && onChange()}
       disabled={isDisabled}
-      className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all ${
-        isSelected
+      className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all ${isSelected
           ? "bg-gradient-to-r from-sky-500 to-blue-500 shadow-lg shadow-sky-500/30"
           : "bg-gray-300"
-      } ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+        } ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
     >
       <span
-        className={`inline-flex items-center justify-center h-5 w-5 transform rounded-full bg-white shadow-md transition-all ${
-          isSelected ? "translate-x-6" : "translate-x-1"
-        }`}
+        className={`inline-flex items-center justify-center h-5 w-5 transform rounded-full bg-white shadow-md transition-all ${isSelected ? "translate-x-6" : "translate-x-1"
+          }`}
       >
         {isSelected ? (
           <Check className="h-3 w-3 text-sky-600" />
@@ -170,11 +168,11 @@ export default function PreordersClient({
     setSelectedKeys(next);
   };
 
-  const isAllSelected = preorders.length > 0 && 
+  const isAllSelected = preorders.length > 0 &&
     preorders.every((item) => selectedKeys.has(String(item.id)));
 
-  const isSomeSelected = preorders.length > 0 && 
-    preorders.some((item) => selectedKeys.has(String(item.id))) && 
+  const isSomeSelected = preorders.length > 0 &&
+    preorders.some((item) => selectedKeys.has(String(item.id))) &&
     !isAllSelected;
 
   const selectedCount = selectedKeys.size;
@@ -232,14 +230,14 @@ export default function PreordersClient({
             <h1 className="text-3xl font-bold text-gray-900">Preorders</h1>
             <p className="text-sm text-gray-500 mt-1">Manage your preorder listings</p>
           </div>
-          <Link href="/preorders/create">
-            <Button
-              className="bg-gradient-to-r from-sky-600 to-blue-600 text-white shadow-lg shadow-sky-500/30 hover:shadow-sky-500/50 transition-all rounded-full px-6 py-2.5 font-medium"
-              startContent={<Plus size={18} />}
-            >
+          <Button
+            className="bg-gradient-to-r from-sky-600 to-blue-600 text-white shadow-lg shadow-sky-500/30 hover:shadow-sky-500/50 transition-all rounded-full px-6 py-2.5 font-medium"
+          >
+            <Link href="/preorders/create" className="flex items-center gap-2">
+              <Plus size={18} />
               Create Preorder
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
 
         {/* Selection Info Bar */}
@@ -364,9 +362,8 @@ export default function PreordersClient({
                   return (
                     <tr
                       key={item.id}
-                      className={`hover:bg-gradient-to-r hover:from-sky-50/30 hover:to-blue-50/30 transition group ${
-                        isSelected ? 'bg-sky-50/50' : ''
-                      }`}
+                      className={`hover:bg-gradient-to-r hover:from-sky-50/30 hover:to-blue-50/30 transition group ${isSelected ? 'bg-sky-50/50' : ''
+                        }`}
                     >
                       <td className="px-2 md:px-4 py-3">
                         <CustomCheckbox
@@ -378,11 +375,10 @@ export default function PreordersClient({
                       <td className="px-2 md:px-4 py-3 text-gray-600 hidden sm:table-cell">{item.products}</td>
                       <td className="px-2 md:px-4 py-3 text-gray-600 hidden lg:table-cell">
                         <span
-                          className={`px-2 py-0.5 rounded-full text-xs ${
-                            item.preorderWhen === "out-of-stock"
+                          className={`px-2 py-0.5 rounded-full text-xs ${item.preorderWhen === "out-of-stock"
                               ? "bg-red-50 text-red-600"
                               : "bg-sky-50 text-sky-600"
-                          }`}
+                            }`}
                         >
                           {item.preorderWhen}
                         </span>
@@ -394,16 +390,14 @@ export default function PreordersClient({
                           <Chip
                             size="sm"
                             variant="flat"
-                            className={`${
-                              item.status === "active"
+                            className={`${item.status === "active"
                                 ? "bg-emerald-50 text-emerald-700 border border-emerald-200/50"
                                 : "bg-gray-50 text-gray-600 border border-gray-200/50"
-                            } font-medium hidden sm:inline-flex`}
+                              } font-medium hidden sm:inline-flex`}
                             startContent={
                               <span
-                                className={`w-2 h-2 rounded-full ${
-                                  item.status === "active" ? "bg-emerald-500 animate-pulse" : "bg-gray-400"
-                                }`}
+                                className={`w-2 h-2 rounded-full ${item.status === "active" ? "bg-emerald-500 animate-pulse" : "bg-gray-400"
+                                  }`}
                               />
                             }
                           >
