@@ -3,6 +3,7 @@
 Next.js client for the Preorder Manager app.
 
 🌐 **Live Site:** [https://preorder-manager-gamma.vercel.app](https://preorder-manager-gamma.vercel.app)
+
 🛠 **Backend Repo:** [https://github.com/nihalxofficial/preorder-manager-server](https://github.com/nihalxofficial/preorder-manager-server)
 
 ---
@@ -47,7 +48,7 @@ preorder-manager-client/
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/nihalxofficial/preorder-manager-client
 cd preorder-manager-client
 ```
 
