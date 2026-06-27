@@ -1,4 +1,4 @@
-// app/preorders/PreordersClient.js (Client Component)
+// app/preorders/PreordersClient.js
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -64,17 +64,17 @@ function StatusToggle({ isSelected, onChange, isDisabled }) {
   );
 }
 
-export default function PreordersClient({ 
-  initialPreorders = [], 
+export default function PreordersClient({
+  initialPreorders = [],
   total,
   totalPages: initialTotalPages,
   currentPage: initialCurrentPage,
-  filter = {} 
+  filter = {},
 }) {
   const router = useRouter();
 
   // ========== UI STATE ==========
-  const [preorders] = useState(initialPreorders);
+  const [preorders, setPreorders] = useState(initialPreorders);
   const [selectedKeys, setSelectedKeys] = useState(new Set());
   const [isUpdating, setIsUpdating] = useState(null);
   const [status, setStatus] = useState(filter.status || "all");
@@ -83,7 +83,7 @@ export default function PreordersClient({
   const [page, setPage] = useState(initialCurrentPage || parseInt(filter.page) || 1);
   const limit = parseInt(filter.limit) || 8;
   const totalPages = initialTotalPages || Math.ceil(total / limit);
-  
+
   // Track previous filter values to detect when filter actually changes
   const prevStatusRef = useRef(status);
   const prevSortByRef = useRef(sortBy);
@@ -93,6 +93,11 @@ export default function PreordersClient({
   const startItem = (page - 1) * limit + 1;
   const endItem = Math.min(page * limit, total);
 
+  // ========== UPDATE PREORDERS WHEN PROPS CHANGE ==========
+  useEffect(() => {
+    setPreorders(initialPreorders);
+  }, [initialPreorders]);
+
   // ========== UPDATE URL ON FILTER CHANGE ==========
   useEffect(() => {
     const sp = new URLSearchParams();
@@ -101,27 +106,25 @@ export default function PreordersClient({
     if (sortOrder) sp.set("order", sortOrder);
     if (page > 1) sp.set("page", String(page));
     if (limit !== 8) sp.set("limit", String(limit));
-    
+
     const queryString = sp.toString();
     const currentUrl = window.location.search;
-    
+
     if (`?${queryString}` !== currentUrl) {
       router.push(`?${queryString}`);
     }
   }, [status, sortBy, sortOrder, page, limit, router]);
 
-  // ========== RESET PAGE ONLY WHEN FILTER CHANGES (not on page change) ==========
+  // ========== RESET PAGE ONLY WHEN FILTER CHANGES ==========
   useEffect(() => {
     const statusChanged = prevStatusRef.current !== status;
     const sortByChanged = prevSortByRef.current !== sortBy;
     const sortOrderChanged = prevSortOrderRef.current !== sortOrder;
 
-    // Only reset page if filter actually changed (not page change)
     if (statusChanged || sortByChanged || sortOrderChanged) {
       setPage(1);
     }
 
-    // Update refs
     prevStatusRef.current = status;
     prevSortByRef.current = sortBy;
     prevSortOrderRef.current = sortOrder;
@@ -142,29 +145,47 @@ export default function PreordersClient({
 
   const handleToggleStatus = async (id) => {
     setIsUpdating(id);
-    const result = await toggleStatusAction(id);
-    setIsUpdating(null);
-    if (result.success) router.refresh();
+    try {
+      const result = await toggleStatusAction(id);
+      if (result.success) {
+        router.refresh();
+      } else {
+        console.error("Failed to toggle status:", result.error);
+      }
+    } catch (error) {
+      console.error("Error toggling status:", error);
+    } finally {
+      setIsUpdating(null);
+    }
   };
 
   const handleDelete = async (id) => {
     if (!confirm("Are you sure you want to delete this preorder?")) return;
-    const result = await deletePreorderAction(id);
-    if (result.success) router.refresh();
+
+    try {
+      const result = await deletePreorderAction(id);
+      if (result.success) {
+        router.refresh();
+      } else {
+        console.error("Failed to delete preorder:", result.error);
+      }
+    } catch (error) {
+      console.error("Error deleting preorder:", error);
+    }
   };
 
   const handleSelectAll = (checked) => {
-    setSelectedKeys(checked ? new Set(preorders.map((item) => item.id)) : new Set());
+    setSelectedKeys(checked ? new Set(preorders.map((item) => String(item.id))) : new Set());
   };
 
   const handleSelectRow = (id, checked) => {
     const next = new Set(selectedKeys);
-    checked ? next.add(id) : next.delete(id);
+    checked ? next.add(String(id)) : next.delete(String(id));
     setSelectedKeys(next);
   };
 
-  const isAllSelected = preorders.length > 0 && preorders.every((item) => selectedKeys.has(item.id));
-  const isSomeSelected = preorders.some((item) => selectedKeys.has(item.id));
+  const isAllSelected = preorders.length > 0 && preorders.every((item) => selectedKeys.has(String(item.id)));
+  const isSomeSelected = preorders.some((item) => selectedKeys.has(String(item.id)));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50/30 to-white p-4 md:p-8">
@@ -296,7 +317,7 @@ export default function PreordersClient({
                   >
                     <td className="px-2 md:px-4 py-3">
                       <Checkbox
-                        isSelected={selectedKeys.has(item.id)}
+                        isSelected={selectedKeys.has(String(item.id))}
                         onValueChange={(checked) => handleSelectRow(item.id, checked)}
                         size="sm"
                         classNames={{ wrapper: "after:bg-gradient-to-r after:from-sky-600 after:to-blue-600" }}
@@ -374,7 +395,7 @@ export default function PreordersClient({
           </table>
         </div>
 
-        {/* ========== PAGINATION - EXACTLY LIKE PROPERTIES ========== */}
+        {/* ========== PAGINATION ========== */}
         {totalPages > 1 && (
           <div className="mt-6">
             <Pagination className="w-full">

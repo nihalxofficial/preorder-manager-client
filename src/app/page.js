@@ -35,7 +35,6 @@ export default async function PreordersPage({ searchParams }) {
 
   return (
     <PreordersClient
-      key={queryString}
       initialPreorders={formattedData}
       total={data.meta.total}
       totalPages={data.meta.totalPages}
